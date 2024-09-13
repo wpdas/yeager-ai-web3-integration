@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { createNFTmetadata } from "@/api";
 import { contract } from "@/blockchain";
 import { PINATA_GATEWAY_FORMATTED_URL } from "@/constants";
+import { routePaths } from "@/routes";
 import { uploadImageToIPFS } from "@/services";
 import { dispatch, useTypedSelector } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,8 +71,15 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
           console.log("Token URI:", tokenURI);
 
           console.log("Starting Minting process...");
+
           // Mint NFT
           await contract.mintNFT({ tokenURI });
+
+          // Success
+          dispatch.globalDialog.setMessage({
+            message: "NFT minted successfully!",
+            goTo: routePaths.userAssets, // take user to its NFT galley
+          });
         } catch (error) {
           console.log(error);
           dispatch.error.setError({

@@ -53,14 +53,47 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
 
 export const ownerOf = async (tokenId: string) => {
   const contractProps = await getContractProps();
-  if (!contractProps || !tokenURI) return null;
+  if (!contractProps || !tokenId) return null;
   const { contract } = contractProps;
   return contract.ownerOf(tokenId);
 };
 
 export const tokenURI = async (uri: string) => {
   const contractProps = await getContractProps();
-  if (!contractProps || !tokenURI) return null;
+  if (!contractProps || !uri) return null;
   const { contract } = contractProps;
   return contract.tokenURI(uri);
+};
+
+export type NFTs = { tokenId: string; tokenURI: string }[];
+
+export const listNFTs = async (accountAddress: string) => {
+  const contractProps = await getContractProps();
+  if (!contractProps || !accountAddress) return null;
+  const { contract } = contractProps;
+
+  // Get user/owner tokenIds
+  const tokenOfOwner = await contract.tokensOfOwner(accountAddress);
+  const tokenIds: string[] = tokenOfOwner.map((id: BigInt) => id.toString());
+
+  // Get tokenURIs
+  const tokenURIPromises = tokenIds.map((tokenId) =>
+    contract.tokenURI(tokenId),
+  );
+  const tokenURIs = await Promise.all(tokenURIPromises);
+
+  // Prepare data structure for NFTs
+  const nfts: NFTs = [];
+  tokenIds.forEach((_, index) => {
+    nfts.push({
+      tokenId: tokenIds[index],
+      tokenURI: tokenURIs[index],
+    });
+  });
+
+  // console.log("Token IDs:", tokenIds);
+  // console.log("Token URIs:", tokenURIs);
+  // console.log("NFTs Data Structure", nfts);
+
+  return nfts;
 };

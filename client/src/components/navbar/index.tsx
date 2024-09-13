@@ -5,7 +5,6 @@ import {
   Flex,
   HStack,
   Image,
-  Stack,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";

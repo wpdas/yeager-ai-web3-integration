@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Files from "react-files";
 import { ErrorMessage } from "@/components";
-import { dispatch } from "@/store";
 import {
   Button,
   Card,
@@ -10,7 +9,6 @@ import {
   Heading,
   Image,
   Input,
-  Spinner,
   Stack,
   Tag,
   Text,
@@ -25,10 +23,6 @@ const MintForm = () => {
     imageFile: selectedFile,
   });
   const formValues = form.watch();
-
-  useEffect(() => {
-    dispatch.globalDialog.setMessage({ message: "All good ma friend!" });
-  }, []);
 
   const onSelectImage = useCallback(
     async (files: any[]) => {
@@ -54,10 +48,6 @@ const MintForm = () => {
 
   return (
     <>
-      <Heading size="md" mb="2">
-        Mint New Digital Asset (NFT)
-      </Heading>
-
       <Card maxW="md" mb="4">
         <CardBody>
           <Tag width="fit-content">NFT Preview</Tag>
@@ -130,7 +120,7 @@ const MintForm = () => {
               <ErrorMessage error={errors.description?.message} />
             </Stack>
 
-            <Button colorScheme="purple" opacity={submitting ? 0.7 : 1}>
+            <Button colorScheme="purple" opacity={submitting ? 0.4 : 1}>
               <Files
                 multiple={false}
                 accepts={["image/*"]}
@@ -148,11 +138,13 @@ const MintForm = () => {
               {selectImageText}
             </Button>
             <Button
+              isLoading={submitting}
+              loadingText="Minting"
               colorScheme="purple"
-              opacity={!form.formState.isValid ? 0.7 : 1}
+              spinnerPlacement="end"
               onClick={onMintClick}
             >
-              {submitting ? <Spinner /> : "Mint NFT"}
+              Mint NFT
             </Button>
           </Stack>
         </CardFooter>

@@ -1,7 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GlobalDialog } from "@/components";
 import Navbar from "@/components/navbar";
-import { Home } from "@/pages/home";
+import { HomePage } from "@/pages/home";
+import { MintPage } from "@/pages/mint";
+import { UserAssetsPage } from "@/pages/user-assets";
+
+export const routePaths = {
+  home: "/",
+  userAssets: "/user-assets",
+  mint: "/mint",
+};
 
 export const AppRoutes = () => {
   return (
@@ -9,8 +17,9 @@ export const AppRoutes = () => {
       <Navbar />
       <GlobalDialog />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<Home />} />
+        <Route path={routePaths.home} element={<HomePage />} />
+        <Route path={routePaths.mint} element={<MintPage />} />
+        <Route path={routePaths.userAssets} element={<UserAssetsPage />} />
       </Routes>
     </BrowserRouter>
   );

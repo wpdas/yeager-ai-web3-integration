@@ -1,6 +1,7 @@
 import { Container, Heading, Stack } from "@chakra-ui/react";
+import MintForm from "./components/mint-form";
 
-export const HomePage = () => {
+export const MintPage = () => {
   return (
     <Container
       maxW="container.xl"
@@ -10,9 +11,9 @@ export const HomePage = () => {
     >
       <Stack width="100%" alignItems="center" display="flex">
         <Heading size="md" mb="2">
-          Home
+          Mint New Digital Asset (NFT)
         </Heading>
-        <p>oi</p>
+        <MintForm />
       </Stack>
     </Container>
   );
