@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Files from "react-files";
-import { contract } from "@/blockchain";
-import { ErrorMessage } from "@/ui";
+import { ErrorMessage } from "@/components";
+import { dispatch } from "@/store";
 import {
   Button,
   Card,
@@ -26,6 +26,10 @@ const MintForm = () => {
   });
   const formValues = form.watch();
 
+  useEffect(() => {
+    dispatch.globalDialog.setMessage({ message: "All good ma friend!" });
+  }, []);
+
   const onSelectImage = useCallback(
     async (files: any[]) => {
       if (files) {
@@ -43,15 +47,6 @@ const MintForm = () => {
       onSubmit();
     }
   }, [form, onSubmit]);
-
-  // TEMP
-  useEffect(() => {
-    (async () => {
-      const tokenId = 0;
-      const tokenURI = await contract.tokenURI(tokenId.toString());
-      console.log("Token URI:", tokenURI);
-    })();
-  }, []);
 
   const selectImageText = formValues.imageURLPreview
     ? "Select Another Image"
