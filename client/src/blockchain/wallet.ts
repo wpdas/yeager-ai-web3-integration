@@ -4,7 +4,7 @@
  */
 export const connectWallet = async () => {
   if (window.ethereum) {
-    // Ask user to connect wallet
+    // Ask user to connect wallet and return only his/her account address
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });

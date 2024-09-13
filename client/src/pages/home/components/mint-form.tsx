@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Files from "react-files";
+import { contract } from "@/blockchain";
 import { ErrorMessage } from "@/ui";
 import {
   Button,
@@ -42,6 +43,15 @@ const MintForm = () => {
       onSubmit();
     }
   }, [form, onSubmit]);
+
+  // TEMP
+  useEffect(() => {
+    (async () => {
+      const tokenId = 0;
+      const tokenURI = await contract.tokenURI(tokenId.toString());
+      console.log("Token URI:", tokenURI);
+    })();
+  }, []);
 
   const selectImageText = formValues.imageURLPreview
     ? "Select Another Image"
@@ -93,6 +103,7 @@ const MintForm = () => {
             <Stack>
               <Text fontWeight="medium">Name:</Text>
               <Input
+                disabled={submitting}
                 isInvalid={!!errors.name?.message}
                 fontSize="14px"
                 type="text"
@@ -108,6 +119,7 @@ const MintForm = () => {
             <Stack mt="2" mb="2">
               <Text fontWeight="medium">Description:</Text>
               <Textarea
+                disabled={submitting}
                 isInvalid={!!errors.description?.message}
                 rows={5}
                 fontSize="14px"

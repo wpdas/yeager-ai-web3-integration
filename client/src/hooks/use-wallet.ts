@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { connectedAccount, connectWallet, getProvider } from "@/blockchain";
+import { wallet, provider } from "@/blockchain";
 import { dispatch, useTypedSelector } from "@/store";
 import { formatEther } from "ethers";
 
@@ -10,13 +10,32 @@ export const useWallet = () => {
   const [balance, setBalance] = useState("--");
   const [error, setError] = useState("");
 
+  // Detect when account is changed using MetaMask
+  useEffect(() => {
+    const handler = (accounts: string[]) => {
+      if (accounts.length > 0) {
+        dispatch.wallet.setAccount({ account: accounts[0] });
+      }
+    };
+
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", handler);
+    }
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener("accountsChanged", handler);
+      }
+    };
+  }, []);
+
   // Check connection state
   // INFO: User can sign out using MetaMask and the app needs to verify the status
   const checkConnection = useCallback(async () => {
     try {
-      const _account = await connectedAccount();
+      const _account = await wallet.connectedAccount();
       if (_account !== account) {
-        dispatch.wallet.setAccount(_account);
+        dispatch.wallet.setAccount({ account: _account });
       }
       setError("");
     } catch {
@@ -44,7 +63,7 @@ export const useWallet = () => {
       setConnecting(true);
 
       try {
-        const _account = await connectWallet();
+        const _account = await wallet.connectWallet();
         // set account
         dispatch.wallet.setAccount({ account: _account });
         setError("");
@@ -62,7 +81,7 @@ export const useWallet = () => {
     if (account) {
       (async () => {
         // Fetch account's balance
-        const _balance = await getProvider().getBalance(account);
+        const _balance = await provider.getProvider().getBalance(account);
         const formattedBalance = formatEther(_balance).slice(0, 5); // show like 9.999
         setBalance(formattedBalance);
       })();

@@ -1,3 +1,3 @@
-export * from "./wallet";
-export * from "./contract";
-export * from "./provider";
+export * as wallet from "./wallet";
+export * as contract from "./contract";
+export * as provider from "./provider";
