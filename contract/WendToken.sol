@@ -14,7 +14,7 @@ contract WendToken is ERC721, ERC721URIStorage, Ownable {
     // Map tokenIds for a owner
     mapping(address => uint256[]) private _ownedTokens;
 
-    constructor() ERC721("WendToken2", "NFT") {}
+    constructor() ERC721("WendToken4", "NFT") {}
 
     // Dispath this event every time there is a new mint
     event Minted(address indexed owner, uint256 indexed tokenId);
@@ -28,7 +28,8 @@ contract WendToken is ERC721, ERC721URIStorage, Ownable {
         uint256 tokenId = _tokenIdCounter.current();
         
         _safeMint(to, tokenId);
-        _ownedTokens[to].push(tokenId);  // Add the tokenId to the owner list
+        // INFO: removed because _beforeTokenTransfer does the same process
+        // _ownedTokens[to].push(tokenId);  // Add the tokenId to the owner list
         _setTokenURI(tokenId, uri);
 
         _tokenIdCounter.increment();
@@ -42,6 +43,32 @@ contract WendToken is ERC721, ERC721URIStorage, Ownable {
 
     function tokensOfOwner(address owner) external view returns (uint256[] memory) {
         return _ownedTokens[owner];  // Returns tokenIds the user owns
+    }
+
+    // Manage the _ownedTokens to make sure tokensOfOwner is returning only the assets owned by the "address"
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override {
+        if (from != address(0)) {
+            // Remove tokenId from the list of 'from'
+            uint256[] storage fromTokens = _ownedTokens[from];
+            for (uint256 i = 0; i < fromTokens.length; i++) {
+                if (fromTokens[i] == tokenId) {
+                    fromTokens[i] = fromTokens[fromTokens.length - 1];
+                    fromTokens.pop();
+                    break;
+                }
+            }
+        }
+
+        if (to != address(0)) {
+            // Adds tokenId to the list of 'to'
+            _ownedTokens[to].push(tokenId);
+        }
+        
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
     // The following functions are overrides required by Solidity.

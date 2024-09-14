@@ -8,10 +8,6 @@ type Props = {
 
 export const MenuItems = ({ onClick }: Props) => (
   <>
-    <Link as={ReactRouterLink} to={routePaths.home} onClick={onClick}>
-      Home
-    </Link>
-
     <Link as={ReactRouterLink} to={routePaths.userAssets} onClick={onClick}>
       My NFTs
     </Link>
@@ -20,7 +16,11 @@ export const MenuItems = ({ onClick }: Props) => (
       Mint
     </Link>
 
-    <Link href="#" onClick={onClick}>
+    <Link
+      href="https://github.com/wpdas/yeager-ai-web3-integration"
+      target="_blank"
+      onClick={onClick}
+    >
       Git Repo
     </Link>
   </>

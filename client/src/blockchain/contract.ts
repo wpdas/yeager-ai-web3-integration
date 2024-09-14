@@ -10,7 +10,6 @@ import { getProvider } from "./provider";
  */
 export const getContractProps = async () => {
   if (!window.ethereum) {
-    dispatch.error.setError({ message: "MetaMask is not installed!" });
     return;
   }
 
@@ -38,14 +37,17 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
   try {
     // Call the contract's mintNFT method
     const transaction = await contract.mintNFT(recipientAddress, tokenURI);
-    console.log("Tx sent:", transaction.hash);
+    // console.log("Tx sent:", transaction.hash);
 
     // Wait for transaction confirmation
-    const receipt = await transaction.wait();
-    console.log("Tx confirmed:", receipt);
+    await transaction.wait();
+
+    // INFO: For logs
+    // const receipt = await transaction.wait();
+    // console.log("Tx confirmed:", receipt);
   } catch (error) {
-    console.error("Error minting NFT:", error);
-    dispatch.error.setError({
+    // console.error("Error minting NFT:", error);
+    dispatch.globalDialog.setError({
       message: "Error while minting NFT. Please, try again!",
     });
   }
@@ -65,7 +67,7 @@ export const tokenURI = async (uri: string) => {
   return contract.tokenURI(uri);
 };
 
-export type NFTs = { tokenId: string; tokenURI: string }[];
+export type NFT = { tokenId: string; tokenURI: string };
 
 export const listNFTs = async (accountAddress: string) => {
   const contractProps = await getContractProps();
@@ -83,7 +85,7 @@ export const listNFTs = async (accountAddress: string) => {
   const tokenURIs = await Promise.all(tokenURIPromises);
 
   // Prepare data structure for NFTs
-  const nfts: NFTs = [];
+  const nfts: NFT[] = [];
   tokenIds.forEach((_, index) => {
     nfts.push({
       tokenId: tokenIds[index],
@@ -91,9 +93,33 @@ export const listNFTs = async (accountAddress: string) => {
     });
   });
 
+  // INFO: for logs
   // console.log("Token IDs:", tokenIds);
   // console.log("Token URIs:", tokenURIs);
   // console.log("NFTs Data Structure", nfts);
 
   return nfts;
+};
+
+export const getContractInstance = async () => {
+  const contractProps = await getContractProps();
+  if (!contractProps) return null;
+  const { contract } = contractProps;
+  return contract;
+};
+
+export const safeTransferFrom = async (
+  from: string,
+  to: string,
+  tokenId: string,
+) => {
+  const contractProps = await getContractProps();
+  if (!contractProps || !from || !to || !tokenId) return null;
+  const { contract } = contractProps;
+
+  // Call contract's method to transfer asset
+  const transaction = await contract.safeTransferFrom(from, to, tokenId);
+  // Wait for transaction confirmation
+  const receipt = await transaction.wait();
+  return receipt;
 };

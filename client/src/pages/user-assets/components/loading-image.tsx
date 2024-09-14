@@ -1,5 +1,4 @@
-import { ViewIcon } from "@chakra-ui/icons";
-import { Stack, Text } from "@chakra-ui/react";
+import { Spinner, Stack } from "@chakra-ui/react";
 
 export const LoadingImage = () => (
   <Stack
@@ -10,7 +9,6 @@ export const LoadingImage = () => (
     justifyContent="center"
     borderRadius="lg"
   >
-    <ViewIcon w={8} h={8} color="gray.500" />
-    <Text color="gray.500">loading</Text>
+    <Spinner speed="0.6s" />
   </Stack>
 );

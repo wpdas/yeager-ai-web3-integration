@@ -17,7 +17,7 @@ import {
 import { useMintNftForm } from "../hooks/use-mint-form";
 import { NoImagePreview } from "./no-image-preview";
 
-const MintForm = () => {
+export const MintForm = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const { form, errors, onSubmit, submitting } = useMintNftForm({
     imageFile: selectedFile,
@@ -152,5 +152,3 @@ const MintForm = () => {
     </>
   );
 };
-
-export default MintForm;

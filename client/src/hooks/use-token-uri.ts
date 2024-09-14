@@ -7,14 +7,16 @@ interface TokenURIBody {
   preview_image: string;
 }
 
-export const useTokenURI = (tokenURI: string) => {
+export const useTokenURI = (tokenURI?: string) => {
   const [tokenInfo, setTokenInfo] = useState<TokenURIBody>();
 
   useEffect(() => {
     (async () => {
-      const tokenUriResponse = await fetch(tokenURI);
-      const tokenUriData = await tokenUriResponse.json();
-      setTokenInfo(tokenUriData);
+      if (tokenURI) {
+        const tokenUriResponse = await fetch(tokenURI);
+        const tokenUriData = await tokenUriResponse.json();
+        setTokenInfo(tokenUriData);
+      }
     })();
   }, [tokenURI]);
 

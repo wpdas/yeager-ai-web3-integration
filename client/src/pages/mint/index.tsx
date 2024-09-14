@@ -1,7 +1,20 @@
+import { NotConnectedContainer } from "@/components";
+import { useWallet } from "@/hooks";
 import { Container, Heading, Stack } from "@chakra-ui/react";
-import MintForm from "./components/mint-form";
+import { MintForm } from "./components/mint-form";
 
 export const MintPage = () => {
+  const { isConnected } = useWallet();
+
+  if (!isConnected) {
+    return (
+      <NotConnectedContainer
+        title="Mint New Digital Asset (NFT)"
+        message="You need to connect your wallet to mint new assets."
+      />
+    );
+  }
+
   return (
     <Container
       maxW="container.xl"

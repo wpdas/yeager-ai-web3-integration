@@ -3,7 +3,7 @@ import { wallet, provider } from "@/blockchain";
 import { dispatch, useTypedSelector } from "@/store";
 import { formatEther } from "ethers";
 
-export const useWallet = () => {
+export const useWallet = (onAccountChange?: () => void) => {
   const account = useTypedSelector((state) => state.wallet.account);
   const [connecting, setConnecting] = useState(false);
   const [ethereum] = useState(window.ethereum);
@@ -15,6 +15,11 @@ export const useWallet = () => {
     const handler = (accounts: string[]) => {
       if (accounts.length > 0) {
         dispatch.wallet.setAccount({ account: accounts[0] });
+
+        // Call onAccountChange when account is changed
+        if (onAccountChange) {
+          onAccountChange();
+        }
       }
     };
 

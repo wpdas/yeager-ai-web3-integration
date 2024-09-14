@@ -30,7 +30,6 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
   const onSubmit: SubmitHandler<MintNftInputs> = useCallback(
     async (formData) => {
       if (imageFile) {
-        console.log(formData, imageFile);
         setSubmitting(true);
 
         // Upload image to IPFS (using Pinata) and get its CID
@@ -51,7 +50,7 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
 
           // Store the imageCID info
           dispatch.mintStatus.setImageCID(imageCID);
-          console.log(imageCID);
+          // console.log(imageCID);
 
           // Generate the tokenURI (JSON metadata) for this NFT (image)
           let tokenURI = previousTokenURI || "";
@@ -68,9 +67,8 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
 
           // Store the tokenURI address
           dispatch.mintStatus.setTokenURI(tokenURI);
-          console.log("Token URI:", tokenURI);
-
-          console.log("Starting Minting process...");
+          // console.log("Token URI:", tokenURI);
+          // console.log("Starting Minting process...");
 
           // Mint NFT
           await contract.mintNFT({ tokenURI });
@@ -82,7 +80,7 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
           });
         } catch (error) {
           console.log(error);
-          dispatch.error.setError({
+          dispatch.globalDialog.setError({
             message:
               "There was an error while minting the NFT. Please, try again!",
           });

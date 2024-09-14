@@ -11,9 +11,9 @@
 
 -- Contrato com mint publico: Todos podem mintar (atualmente em uso)
 
-- Contrato address: 0x5873AaA85F58b8F89e7Eb053D2CeEC48866ba13c
-- Contract on sepolia.etherscan: https://sepolia.etherscan.io/address/0x5873aaa85f58b8f89e7eb053d2ceec48866ba13c
-- Transacao do doploy do contrato: https://sepolia.etherscan.io/tx/0x249118b33fd4d1dff3aa66a842ee29d7b316dc71f5ab9a62ea4e7d2c16d8d3ef
+- Contrato address: 0x98437a94C9b2335Fe56fCAb0bA14e327976d2573
+- Contract on sepolia.etherscan: https://sepolia.etherscan.io/address/0x98437a94c9b2335fe56fcab0ba14e327976d2573
+- Transacao do doploy do contrato: https://sepolia.etherscan.io/tx/0xb413d064d10bd9325f9f99403d48f887055549cb4c62e300f17450ef8d7d78fe
 
 OBS:
 
