@@ -19,7 +19,6 @@ import { AssetDetailsModal } from "./components/asset-details-modal";
 export const GalleryPage = () => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [ready, setReady] = useState(false);
-  const [contractName, setContractName] = useState("");
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const [nftToSee, setNftToSee] = useState<NFT>();
 
@@ -36,20 +35,6 @@ export const GalleryPage = () => {
   useEffect(() => {
     fetchNFTs();
   }, [fetchNFTs]);
-
-  // Fetch Contract Name and Symbol (cosmetic only)
-  // useEffect(() => {
-  //   (async () => {
-  //     if (isConnected) {
-  //       const contractInstance = await contract.getContractInstance();
-  //       if (contractInstance) {
-  //         const _contractName = await contractInstance!.name();
-  //         const contractSymbol = await contractInstance!.symbol();
-  //         setContractName(`${_contractName} (${contractSymbol})`);
-  //       }
-  //     }
-  //   })();
-  // }, [isConnected]);
 
   const onCloseAssetDetailsModal = useCallback(() => {
     setNftToSee(undefined);
@@ -79,7 +64,6 @@ export const GalleryPage = () => {
       >
         <Heading size="md">NFT Gallery</Heading>
         <Text fontSize="sm" mb="2">
-          {contractName}
           Complete list of all minted NFTs
         </Text>
 

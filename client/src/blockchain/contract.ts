@@ -1,4 +1,4 @@
-import { CONTRACT_ADDRESS } from "@/constants";
+import { ALCHEMY_API_KEY, CONTRACT_ADDRESS } from "@/constants";
 import { dispatch } from "@/store";
 import { ethers } from "ethers";
 import contractABI from "./contract-abi.json";
@@ -20,6 +20,20 @@ export const getContractProps = async () => {
   const signer = await provider.getSigner();
   const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
   return { provider, signer, contract };
+};
+
+/**
+ * This must be used for view (non payable) methods when MetaMask is not available
+ * @returns
+ */
+export const getContractPropsThroughAlchemy = async () => {
+  const provider = new ethers.JsonRpcProvider(
+    `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+  );
+
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, provider);
+
+  return { provider, contract };
 };
 
 interface MintNFTPayload {
@@ -55,7 +69,10 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
 };
 
 export const ownerOf = async (tokenId: string) => {
-  const contractProps = await getContractProps();
+  const contractProps = window.ethereum
+    ? await getContractProps()
+    : await getContractPropsThroughAlchemy();
+
   if (!contractProps || !tokenId) return null;
   const { contract } = contractProps;
   return contract.ownerOf(tokenId);
@@ -104,10 +121,18 @@ export const listOwnerNFTs = async (accountAddress: string) => {
 
 /**
  * Get a list of all NFTs minted
+ *
+ * Info: This function uses Alchemy as the intention is to show the list of
+ * NFTs even if the user does not have MetaMask installed.
+ *
+ * Get to know more: https://docs.alchemy.com/docs/choosing-a-web3-network#sepolia-testnet
  * @returns
  */
 export const listAllNFTs = async () => {
-  const contractProps = await getContractProps();
+  const contractProps = window.ethereum
+    ? await getContractProps()
+    : await getContractPropsThroughAlchemy();
+
   if (!contractProps) return null;
   const { contract } = contractProps;
 
