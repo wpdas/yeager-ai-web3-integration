@@ -5,8 +5,8 @@
   "author": "Wenderson Pires <wendersonpdas@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "install-dependencies": "concurrently \"cd server; yarn\"",
-    "start": "concurrently \"cd server; yarn start\""
+    "install-dependencies": "concurrently \"cd server; yarn\" \"cd client; yarn\"",
+    "start": "concurrently \"cd server; yarn start\" \"cd client; yarn start\""
   },
   "dependencies": {
     "concurrently": "^9.0.0"
