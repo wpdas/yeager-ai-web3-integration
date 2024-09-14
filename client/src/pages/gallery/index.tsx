@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { contract } from "@/blockchain";
 import { NFT } from "@/blockchain/contract";
 import { NotConnectedContainer } from "@/components";
+import { NFTCard } from "@/components";
 import { useWallet } from "@/hooks";
 import {
   Container,
@@ -13,76 +14,46 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { NFTCard } from "../../components/nft-card";
 import { AssetDetailsModal } from "./components/asset-details-modal";
-import { TransferAssetModalForm } from "./components/transfer-asset-modal-form";
 
-export const UserAssetsPage = () => {
+export const GalleryPage = () => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [ready, setReady] = useState(false);
   const [contractName, setContractName] = useState("");
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const [nftToTransfer, setNftToTransfer] = useState<NFT>();
   const [nftToSee, setNftToSee] = useState<NFT>();
 
-  // Make sure the transfer modal is closed when account is changed using MetaMask
-  const onAccountChange = useCallback(() => {
-    setNftToTransfer(undefined);
+  // Fetch all NFTs
+  const fetchNFTs = useCallback(async () => {
+    const allNfts = await contract.listAllNFTs();
+    if (allNfts) {
+      setNfts(allNfts);
+    }
+    setReady(true);
   }, []);
 
-  const { account, isConnected } = useWallet(onAccountChange);
-
-  // Fetch owner's NFTs
-  const fetchOwnerNFTs = useCallback(async () => {
-    if (account) {
-      const userNfts = await contract.listOwnerNFTs(account);
-      if (userNfts) {
-        setNfts(userNfts);
-      }
-      setReady(true);
-    } else {
-      setReady(true);
-    }
-  }, [account]);
-
-  // Call fetchOwnerNFTs
+  // Call fetchNFTs
   useEffect(() => {
-    fetchOwnerNFTs();
-  }, [fetchOwnerNFTs]);
+    fetchNFTs();
+  }, [fetchNFTs]);
 
   // Fetch Contract Name and Symbol (cosmetic only)
-  useEffect(() => {
-    (async () => {
-      if (isConnected) {
-        const contractInstance = await contract.getContractInstance();
-        if (contractInstance) {
-          const _contractName = await contractInstance!.name();
-          const contractSymbol = await contractInstance!.symbol();
-          setContractName(`${_contractName} (${contractSymbol})`);
-        }
-      }
-    })();
-  }, [isConnected]);
-
-  const onCloseTransferModal = useCallback(() => {
-    setNftToTransfer(undefined);
-
-    // refresh list of NFTs
-    fetchOwnerNFTs();
-  }, [fetchOwnerNFTs]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (isConnected) {
+  //       const contractInstance = await contract.getContractInstance();
+  //       if (contractInstance) {
+  //         const _contractName = await contractInstance!.name();
+  //         const contractSymbol = await contractInstance!.symbol();
+  //         setContractName(`${_contractName} (${contractSymbol})`);
+  //       }
+  //     }
+  //   })();
+  // }, [isConnected]);
 
   const onCloseAssetDetailsModal = useCallback(() => {
     setNftToSee(undefined);
   }, []);
-
-  if (!isConnected) {
-    return (
-      <NotConnectedContainer
-        title="My Digital Assets (NFTs)"
-        message="You need to connect your wallet to see your assets."
-      />
-    );
-  }
 
   if (!ready) {
     return (
@@ -106,13 +77,14 @@ export const UserAssetsPage = () => {
         padding={`0 ${isLargerThan768 ? "24" : "0"}px`}
         mb="54"
       >
-        <Heading size="md">My Digital Assets</Heading>
+        <Heading size="md">NFT Gallery</Heading>
         <Text fontSize="sm" mb="2">
           {contractName}
+          Complete list of all minted NFTs
         </Text>
 
         {ready && nfts.length === 0 && (
-          <Text mt="8">You don't have any assets.</Text>
+          <Text mt="8">There is no assets available.</Text>
         )}
 
         <Stack w="100%">
@@ -129,12 +101,10 @@ export const UserAssetsPage = () => {
             {nfts.map((nft) => {
               return (
                 <NFTCard
+                  showOwner
                   key={nft.tokenId}
                   tokenURI={nft.tokenURI}
                   tokenId={nft.tokenId}
-                  onTransferClick={() => {
-                    setNftToTransfer(nft);
-                  }}
                   onSeeMoreClick={() => {
                     setNftToSee(nft);
                   }}
@@ -145,14 +115,12 @@ export const UserAssetsPage = () => {
         </Stack>
       </Stack>
 
-      {/* Transfer Asset Modal Form */}
-      <TransferAssetModalForm
-        nft={nftToTransfer}
-        onClose={onCloseTransferModal}
-      />
-
       {/* Asset Details Modal */}
-      <AssetDetailsModal nft={nftToSee} onClose={onCloseAssetDetailsModal} />
+      <AssetDetailsModal
+        showOwner
+        nft={nftToSee}
+        onClose={onCloseAssetDetailsModal}
+      />
     </Container>
   );
 };

@@ -5,9 +5,7 @@ export const getProvider = () => {
 
   if (window.ethereum) {
     provider = new ethers.BrowserProvider(window.ethereum);
-    // provider = new ethers.providers.Web3Provider(window.ethereum);
   }
 
   return provider as ethers.BrowserProvider;
-  // return provider as ethers.providers.Web3Provider;
 };

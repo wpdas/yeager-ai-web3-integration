@@ -32,7 +32,7 @@ export const useWallet = (onAccountChange?: () => void) => {
         window.ethereum.removeListener("accountsChanged", handler);
       }
     };
-  }, []);
+  }, [onAccountChange]);
 
   // Check connection state
   // INFO: User can sign out using MetaMask and the app needs to verify the status

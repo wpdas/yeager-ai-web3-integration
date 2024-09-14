@@ -70,7 +70,12 @@ export const tokenURI = async (uri: string) => {
 
 export type NFT = { tokenId: string; tokenURI: string };
 
-export const listNFTs = async (accountAddress: string) => {
+/**
+ * Get a list of owner's NFTs
+ * @param accountAddress
+ * @returns
+ */
+export const listOwnerNFTs = async (accountAddress: string) => {
   const contractProps = await getContractProps();
   if (!contractProps || !accountAddress) return null;
   const { contract } = contractProps;
@@ -90,6 +95,37 @@ export const listNFTs = async (accountAddress: string) => {
   tokenIds.forEach((_, index) => {
     nfts.push({
       tokenId: tokenIds[index],
+      tokenURI: tokenURIs[index],
+    });
+  });
+
+  return nfts;
+};
+
+/**
+ * Get a list of all NFTs minted
+ * @returns
+ */
+export const listAllNFTs = async () => {
+  const contractProps = await getContractProps();
+  if (!contractProps) return null;
+  const { contract } = contractProps;
+
+  // Total NFTs minted
+  const totalSupply = await contract.totalSupply();
+
+  const tokenURIPromises = [];
+  for (let tokenId = 0; tokenId < totalSupply; tokenId++) {
+    tokenURIPromises.push(contract.tokenURI(tokenId));
+  }
+
+  const tokenURIs = await Promise.all(tokenURIPromises);
+
+  // Prepare data structure for NFTs
+  const nfts: NFT[] = [];
+  tokenURIs.forEach((_, index) => {
+    nfts.push({
+      tokenId: index.toString(),
       tokenURI: tokenURIs[index],
     });
   });

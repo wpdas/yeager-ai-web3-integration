@@ -9,7 +9,6 @@ export const Footer = () => {
         spacing={24}
         padding="15px 0"
         bg="gray.50"
-        // display={{ base: "none", md: "flex" }}
         position="fixed"
         w="100%"
         zIndex="99"

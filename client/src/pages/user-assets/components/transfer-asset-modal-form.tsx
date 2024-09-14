@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { contract } from "@/blockchain";
 import { NFT } from "@/blockchain/contract";
 import { ErrorMessage } from "@/components";
+import { LoadingImage } from "@/components";
 import { useTokenURI, useWallet } from "@/hooks";
 import { dispatch } from "@/store";
 import {
@@ -23,7 +24,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
-import { LoadingImage } from "./loading-image";
 
 type Props = {
   nft?: NFT;

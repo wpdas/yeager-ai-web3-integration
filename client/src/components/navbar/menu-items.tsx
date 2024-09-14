@@ -8,6 +8,10 @@ type Props = {
 
 export const MenuItems = ({ onClick }: Props) => (
   <>
+    <Link as={ReactRouterLink} to={routePaths.gallery} onClick={onClick}>
+      NFT Gallery
+    </Link>
+
     <Link as={ReactRouterLink} to={routePaths.userAssets} onClick={onClick}>
       My NFTs
     </Link>
