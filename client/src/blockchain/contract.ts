@@ -31,6 +31,7 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
   if (!contractProps || !tokenURI) return null;
 
   const { signer, contract } = contractProps;
+
   // Get the connected account
   const recipientAddress = await signer.getAddress();
 
@@ -45,11 +46,11 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
     // INFO: For logs
     // const receipt = await transaction.wait();
     // console.log("Tx confirmed:", receipt);
+
+    return true;
   } catch (error) {
     // console.error("Error minting NFT:", error);
-    dispatch.globalDialog.setError({
-      message: "Error while minting NFT. Please, try again!",
-    });
+    return false;
   }
 };
 
@@ -92,11 +93,6 @@ export const listNFTs = async (accountAddress: string) => {
       tokenURI: tokenURIs[index],
     });
   });
-
-  // INFO: for logs
-  // console.log("Token IDs:", tokenIds);
-  // console.log("Token URIs:", tokenURIs);
-  // console.log("NFTs Data Structure", nfts);
 
   return nfts;
 };

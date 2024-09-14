@@ -138,6 +138,7 @@ export const MintForm = () => {
               {selectImageText}
             </Button>
             <Button
+              opacity={submitting || !form.formState.isValid ? 0.4 : 1}
               isLoading={submitting}
               loadingText="Minting"
               colorScheme="purple"

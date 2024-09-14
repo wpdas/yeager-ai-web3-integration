@@ -13,6 +13,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { AssetDetailsModal } from "./components/asset-details-modal";
 import { NFTCard } from "./components/nft-card";
 import { TransferAssetModalForm } from "./components/transfer-asset-modal-form";
 
@@ -22,6 +23,7 @@ export const UserAssetsPage = () => {
   const [contractName, setContractName] = useState("");
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const [nftToTransfer, setNftToTransfer] = useState<NFT>();
+  const [nftToSee, setNftToSee] = useState<NFT>();
 
   // Make sure the transfer modal is closed when account is changed using MetaMask
   const onAccountChange = useCallback(() => {
@@ -66,6 +68,10 @@ export const UserAssetsPage = () => {
     // refresh list of NFTs
     fetchOwnerNFTs();
   }, [fetchOwnerNFTs]);
+
+  const onCloseAssetDetailsModal = useCallback(() => {
+    setNftToSee(undefined);
+  }, []);
 
   if (!isConnected) {
     return (
@@ -126,6 +132,9 @@ export const UserAssetsPage = () => {
                   onTransferClick={() => {
                     setNftToTransfer(nft);
                   }}
+                  onSeeMoreClick={() => {
+                    setNftToSee(nft);
+                  }}
                 />
               );
             })}
@@ -133,11 +142,14 @@ export const UserAssetsPage = () => {
         </Stack>
       </Stack>
 
-      {/* Transfer Asset Dialog Form */}
+      {/* Transfer Asset Modal Form */}
       <TransferAssetModalForm
         nft={nftToTransfer}
         onClose={onCloseTransferModal}
       />
+
+      {/* Asset Details Modal */}
+      <AssetDetailsModal nft={nftToSee} onClose={onCloseAssetDetailsModal} />
     </Container>
   );
 };

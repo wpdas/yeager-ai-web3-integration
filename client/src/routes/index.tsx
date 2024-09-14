@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { GlobalDialog } from "@/components";
+import { Footer, GlobalDialog } from "@/components";
 import Navbar from "@/components/navbar";
 import { MintPage } from "@/pages/mint";
 import { UserAssetsPage } from "@/pages/user-assets";
@@ -18,6 +18,7 @@ export const AppRoutes = () => {
         <Route path={routePaths.userAssets} element={<UserAssetsPage />} />
         <Route path={routePaths.mint} element={<MintPage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };

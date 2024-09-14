@@ -1,10 +1,12 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Container,
   Flex,
   HStack,
   Image,
+  Stack,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -20,7 +22,7 @@ const Navbar = () => {
   } = useDisclosure();
 
   return (
-    <>
+    <Stack mb="128">
       {/* Desktop */}
       <VStack
         spacing={24}
@@ -28,6 +30,10 @@ const Navbar = () => {
         bg="gray.50"
         mb={12}
         display={{ base: "none", md: "flex" }}
+        position="fixed"
+        w="100%"
+        zIndex="99"
+        borderBottom="1px solid #eaeaea"
       >
         <Container maxW="container.xl">
           <Flex justifyContent="space-between" alignItems="center" w="100%">
@@ -53,6 +59,10 @@ const Navbar = () => {
         bg="gray.50"
         mb={12}
         display={{ base: "flex", md: "none" }}
+        position="fixed"
+        w="100%"
+        zIndex="99"
+        borderBottom="1px solid #eaeaea"
       >
         <Container maxW="container.xl">
           <Flex
@@ -73,7 +83,7 @@ const Navbar = () => {
           </Flex>
         </Container>
       </VStack>
-    </>
+    </Stack>
   );
 };
 

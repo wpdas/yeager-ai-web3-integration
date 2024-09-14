@@ -34,13 +34,6 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
 
         // Upload image to IPFS (using Pinata) and get its CID
         try {
-          // INFO: This is using NEAR IPFS
-          // const upload = await uploadFileToNearIPFS(imageFile);
-          // const data = await upload.json();
-          // console.log(data);
-          // const imageCID = data.cid;
-
-          // INFO: This is using Pinata IPFS
           // Upload file to IPFS - Pinata
           let imageCID = previousImageCID || "";
           if (!previousImageCID) {
@@ -50,7 +43,6 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
 
           // Store the imageCID info
           dispatch.mintStatus.setImageCID(imageCID);
-          // console.log(imageCID);
 
           // Generate the tokenURI (JSON metadata) for this NFT (image)
           let tokenURI = previousTokenURI || "";
@@ -67,17 +59,25 @@ export const useMintNftForm = ({ imageFile }: { imageFile?: File }) => {
 
           // Store the tokenURI address
           dispatch.mintStatus.setTokenURI(tokenURI);
+          // INFO: Logs
           // console.log("Token URI:", tokenURI);
-          // console.log("Starting Minting process...");
+          // console.log("Starting minting process...");
 
           // Mint NFT
-          await contract.mintNFT({ tokenURI });
+          const success = await contract.mintNFT({ tokenURI });
 
-          // Success
-          dispatch.globalDialog.setMessage({
-            message: "NFT minted successfully!",
-            goTo: routePaths.userAssets, // take user to its NFT galley
-          });
+          if (success) {
+            // Success
+            dispatch.globalDialog.setMessage({
+              message: "NFT minted successfully!",
+              goTo: routePaths.userAssets, // take user to its NFT galley
+            });
+          } else {
+            dispatch.globalDialog.setError({
+              message:
+                "The transaction signature was denied or something else happened. Please, try again!",
+            });
+          }
         } catch (error) {
           console.log(error);
           dispatch.globalDialog.setError({
