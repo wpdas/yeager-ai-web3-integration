@@ -1,8 +1,7 @@
-import { ALCHEMY_API_KEY, CONTRACT_ADDRESS } from "@/constants";
-import { dispatch } from "@/store";
+import { CONTRACT_ADDRESS } from "@/constants";
 import { ethers } from "ethers";
 import contractABI from "./contract-abi.json";
-import { getProvider } from "./provider";
+import { getAlchemyProvider, getProvider } from "./provider";
 
 /**
  * Prepare contract and its dependencies and return them
@@ -27,10 +26,7 @@ export const getContractProps = async () => {
  * @returns
  */
 export const getContractPropsThroughAlchemy = async () => {
-  const provider = new ethers.JsonRpcProvider(
-    `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
-  );
-
+  const provider = getAlchemyProvider();
   const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, provider);
 
   return { provider, contract };
