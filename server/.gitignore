@@ -1,5 +1,7 @@
 /node_modules
-/build
+
+# Render is using free plan, so I need to send the build folder for now as free plan doesn't cover file storage
+# /build
 
 # misc
 .DS_Store
