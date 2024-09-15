@@ -5,7 +5,7 @@
   "author": "Wenderson Pires <wendersonpdas@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node build/src/index.js",
+    "start": "ls; cd ..; node build/src/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc --project ./",
     "lint": "eslint . --ext .js,.ts"
