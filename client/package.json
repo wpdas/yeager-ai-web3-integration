@@ -2,6 +2,8 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "author": "Wenderson Pires <wendersonpdas@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "start": "craco start",
     "build": "craco build",

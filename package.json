@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "install-dependencies": "concurrently \"cd server; yarn\" \"cd client; yarn\"",
-    "start": "concurrently \"cd server; yarn start\" \"cd client; yarn start\""
+    "start": "concurrently \"cd server; yarn dev\" \"cd client; yarn start\""
   },
   "dependencies": {
     "concurrently": "^9.0.0"
