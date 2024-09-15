@@ -5,8 +5,8 @@
   "author": "Wenderson Pires <wendersonpdas@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "pm2 start build/src/index.js --name yeager-ai-web3-integration-api",
-    "dev": "nodemon src/index.ts",
+    "start": "yarn pm2 start build/src/index.js --name yeager-ai-web3-integration-api",
+    "dev": "yarn nodemon src/index.ts",
     "build": "tsc --project ./",
     "lint": "eslint . --ext .js,.ts"
   },
