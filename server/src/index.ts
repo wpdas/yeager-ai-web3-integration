@@ -1,9 +1,14 @@
 import cors from 'cors';
 import express from 'express';
 import { initRoutes } from './routes';
-import { PORT } from './constants';
+import { NODE_ENV, PORT } from './constants';
 
-const serverCors = cors({ origin: true });
+const serverCors = cors({
+  origin:
+    NODE_ENV === 'development'
+      ? '*'
+      : 'https://yeager-ai-web3-integration.vercel.app',
+});
 const server = express();
 
 server.use(serverCors);
