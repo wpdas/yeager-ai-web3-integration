@@ -63,6 +63,7 @@ const Navbar = () => {
         position="fixed"
         w="100%"
         zIndex="99"
+        top="0"
         borderBottom="1px solid #eaeaea"
       >
         <Container maxW="container.xl">
