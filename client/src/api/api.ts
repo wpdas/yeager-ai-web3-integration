@@ -17,3 +17,6 @@ interface CreateNFTmetadataResponse {
 
 export const createNFTmetadata = (payload: CreateNFTmetadataPayload) =>
   api.post<CreateNFTmetadataResponse>("/api/metadata/create", payload);
+
+export const healthCheck = () =>
+  api.get<CreateNFTmetadataResponse>("/api/health-check");
