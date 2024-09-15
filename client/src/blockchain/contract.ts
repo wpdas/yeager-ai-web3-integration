@@ -1,7 +1,21 @@
 import { CONTRACT_ADDRESS } from "@/constants";
+import { store } from "@/store";
 import { ethers } from "ethers";
 import contractABI from "./contract-abi.json";
 import { getAlchemyProvider, getProvider } from "./provider";
+
+/**
+ * Check Wallet account
+ * @returns
+ */
+const isWalletConnected = () => !!store.getState().wallet.account;
+
+/**
+ * Check if window.ethereum is defined and user is connected to MetaMask wallet
+ * @returns
+ */
+const hasMetaMaskWalletConnection = () =>
+  window.ethereum && isWalletConnected();
 
 /**
  * Prepare contract and its dependencies and return them
@@ -65,7 +79,7 @@ export const mintNFT = async ({ tokenURI }: MintNFTPayload) => {
 };
 
 export const ownerOf = async (tokenId: string) => {
-  const contractProps = window.ethereum
+  const contractProps = hasMetaMaskWalletConnection()
     ? await getContractProps()
     : await getContractPropsThroughAlchemy();
 
@@ -125,7 +139,7 @@ export const listOwnerNFTs = async (accountAddress: string) => {
  * @returns
  */
 export const listAllNFTs = async () => {
-  const contractProps = window.ethereum
+  const contractProps = hasMetaMaskWalletConnection()
     ? await getContractProps()
     : await getContractPropsThroughAlchemy();
 
