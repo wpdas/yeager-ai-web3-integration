@@ -1,10 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts@4.5.0/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts@4.5.0/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts@4.5.0/access/Ownable.sol";
-import "@openzeppelin/contracts@4.5.0/utils/Counters.sol";
+// REMIX IDE
+// import "@openzeppelin/contracts@4.5.0/token/ERC721/ERC721.sol";
+// import "@openzeppelin/contracts@4.5.0/token/ERC721/extensions/ERC721URIStorage.sol";
+// import "@openzeppelin/contracts@4.5.0/access/Ownable.sol";
+// import "@openzeppelin/contracts@4.5.0/utils/Counters.sol";
+
+// Local
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract WendToken is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -14,7 +21,7 @@ contract WendToken is ERC721, ERC721URIStorage, Ownable {
     // Map tokenIds for a owner
     mapping(address => uint256[]) private _ownedTokens;
 
-    constructor() ERC721("WendToken4", "NFT") {}
+    constructor() ERC721("WendToken5", "NFT") {}
 
     // Dispath this event every time there is a new mint
     event Minted(address indexed owner, uint256 indexed tokenId);

@@ -10,13 +10,56 @@ Users can view all minted NFTs, check their personal collection of NFTs, and min
 
 ## 1. Running the Project Locally
 
-To run the DApp locally, you will need to have the following dependencies installed:
+To run the DApp locally, ensure you have the appropriate `.env` files in the respective directories.
 
-- **Node Version Manager (NVM)**: Manages Node.js versions.
-- **Yarn**: Dependency management.
+### Env Configuration
+
+- **Client (`client/.env.local`)**:
+
+```sh
+REACT_APP_API_URL=http://localhost:3001
+REACT_APP_PINATA_JWT=<YOUR_PINATA_JWT>
+REACT_APP_GATEWAY_URL=<YOUR_PINATA_GATEWAY_URL>
+# Alchemy API key for Sepolia network
+REACT_APP_ALCHEMY_API_KEY=<YOUR_ALCHEMY_API_KEY>
+# Smart Contract Address
+REACT_APP_CONTRACT_ADDRESS=0x98437a94C9b2335Fe56fCAb0bA14e327976d2573
+# Skip sourcemap generation while developing
+GENERATE_SOURCEMAP=false
+```
+
+- **Server (`server/.env`)**:
+
+```sh
+PORT=3001
+PINATA_JWT=<YOUR_PINATA_JWT>
+PINATA_GATEWAY_URL=<YOUR_PINATA_GATEWAY_URL>
+NODE_ENV=development
+```
+
+- **Smart Contract (`smart-contract/.env`)**:
+
+This is required only if you are planning to change and deploy the contract.
+
+```sh
+SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/<ALCHEMY_API_KEY>
+# Account used to deploy the contract.
+ACCOUNT_PRIVATE_KEY=<YOUR_ACCOUNT_PRIVATE_KEY>
+```
+
+**Obtaining Your Private Key**: To obtain the private key of your MetaMask account:
+
+- Go to MetaMask -> Account Details
+- Click "Show private key"
+- Enter your password
+- Click and hold the "Reveal Private Key" button
+- Copy the private key
 
 ### Prerequisites:
 
+To run the DApp locally, you will need to have the following dependencies installed:
+
+- **Node Version Manager (NVM)**: Manages Node.js versions.
 - **Node.js** version 18.18 (handled by nvm).
 - **Yarn** for package management.
 
@@ -37,7 +80,7 @@ npm install --global yarn
 nvm use
 ```
 
-5. **Install dependencies**: In the project root, run the following command to install both client and server dependencies:
+5. **Install dependencies**: In the project root, run the following command to install client, server, and smart-contract dependencies:
 
 ```sh
 yarn install-dependencies
@@ -49,6 +92,8 @@ yarn install-dependencies
 yarn start
 ```
 
+This command will start both the backend and the frontend. The app should now be accessible in your local development environment here: [**http://localhost:3000**](http://localhost:3000).
+
 ### Production API:
 
 The production API is hosted at `https://yeager-ai-web3-integration.onrender.com`. To check the health of the API, you can run:
@@ -56,6 +101,12 @@ The production API is hosted at `https://yeager-ai-web3-integration.onrender.com
 ```sh
 curl --location 'https://yeager-ai-web3-integration.onrender.com/api/health-check'
 ```
+
+### Current Production Smart Contract:
+
+The production Smart contract is `0x98437a94C9b2335Fe56fCAb0bA14e327976d2573`.
+
+Contract at Sepolia Etherscan: [**https://sepolia.etherscan.io/address/0x98437a94C9b2335Fe56fCAb0bA14e327976d2573**](https://sepolia.etherscan.io/address/0x98437a94C9b2335Fe56fCAb0bA14e327976d2573)
 
 ## 2. Technologies Used and Application Architecture
 
@@ -66,11 +117,13 @@ curl --location 'https://yeager-ai-web3-integration.onrender.com/api/health-chec
 - **Redux**: Manages the application's global state.
 - **Chakra UI**: Provides a responsive and accessible design system.
 - **ESLint**: Tool used to lint the code and maintain a code pattern.
+- **Zod**: Used to create validation schemas for forms, ensuring data integrity and user input validation.
 
 ### Server-Side (API):
 
 - **Node.js and Express**: Power the backend API that handles requests related to metadata creation and upload to Pinata.
 - **TypeScript**: Ensures type safety in the backend as well.
+- **Zod**: Used for validating requests, such as metadata creation, to ensure that incoming data adheres to the expected schema.
 
 ### Blockchain Interaction:
 
@@ -79,8 +132,20 @@ curl --location 'https://yeager-ai-web3-integration.onrender.com/api/health-chec
 - **contract-abi.json**: Contains the ABI (Application Binary Interface) for the NFT smart contract.
 - **MetaMask**: When MetaMask (`window.ethereum`) is detected, it is used as the primary provider for fetching data from the blockchain and interacting with the smart contract.
 - **Alchemy**: If MetaMask is not available, **Alchemy** is used as the fallback provider to fetch public contract data such as the list of NFTs.
+- **Hardhat**: Employed for managing and deploying smart contracts. Specifically, it handles the `WendToken.sol` contract.
+- **Testing**: **Remix IDE** was used to test contract functions with various data inputs.
+
+### Contract Deployment
+
+You should compile the contract with `yarn compile`, which generates the ABI in `artifacts/contracts/WendToken.sol/WendToken.json`. This ABI is required by the client to interact with the contract.
+
+After compiling the contract, use `yarn deploy` to deploy it. Ensure that all necessary environment variables for the smart contract are properly configured before deployment. You should see something like this:
+
+<img alt="DApp Preview" src="./md/deploy.png" />
 
 ## 3. Assumptions and Decisions
+
+### Client:
 
 1. **Folder Structure**: The project follows a modular folder structure where components, hooks, and utilities shared across the app are kept in global directories (`src/components`, `src/hooks`, etc.). Page-specific components, hooks, and models are stored within their respective page folders (e.g., `pages/mint/components`, `pages/mint/hooks`, etc.).
 
@@ -92,11 +157,9 @@ curl --location 'https://yeager-ai-web3-integration.onrender.com/api/health-chec
 import { NftCard } from "@/components";
 ```
 
-4. **Alias Configuration (client only)**: A TypeScript alias `@` is used to point to the `src` directory, which simplifies import paths and improves code readability.
+4. **Alias Configuration**: A TypeScript alias `@` is used to point to the `src` directory, which simplifies import paths and improves code readability.
 
-## 4. Folder Structure
-
-### Client:
+### Client Folder Structure:
 
 ```
 src/
@@ -133,6 +196,12 @@ src/
 ```
 
 ### Server:
+
+1. **Folder Structure**: The server follows a structured approach with specific directories for controllers, middlewares, routes, and services. Controllers handle route-specific logic, middlewares manage request processing, routes define API endpoints, and services interact with external systems such as Pinata.
+
+2. **Global Exports**: The server also uses the `index.ts` approach to export all resources by context, similarly to the Client side.
+
+### Server Folder Structure:
 
 ```
 src/
