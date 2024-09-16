@@ -20,9 +20,13 @@ export const useApiHealthCheck = () => {
   useEffect(() => {
     // Initial check
     check();
-    setInterval(async () => {
+    const interval = setInterval(async () => {
       check();
     }, 60000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [check]);
 
   return alive;
