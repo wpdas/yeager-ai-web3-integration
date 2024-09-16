@@ -4,6 +4,10 @@ This is a DApp developed as part of a Web3 integration project where fronts such
 
 Users can view all minted NFTs, check their personal collection of NFTs, and mint new NFTs. The application connects to a blockchain network to fetch and display NFT data, providing a seamless user experience for interacting with smart contracts.
 
+<a href="https://yeager-ai-web3-integration.vercel.app/" target="_blank">**The DApp is live here. Click here to access it!**</a>
+
+<img alt="DApp Preview" src="./md/preview.png" />
+
 ## 1. Running the Project Locally
 
 To run the DApp locally, you will need to have the following dependencies installed:
@@ -73,6 +77,8 @@ curl --location 'https://yeager-ai-web3-integration.onrender.com/api/health-chec
 - **Ethers.js**: Used to connect with the blockchain and interact with smart contracts.
 - **Contract Functions**: Exposed in a `contract.ts` file, which handles interactions with the smart contract.
 - **contract-abi.json**: Contains the ABI (Application Binary Interface) for the NFT smart contract.
+- **MetaMask**: When MetaMask (`window.ethereum`) is detected, it is used as the primary provider for fetching data from the blockchain and interacting with the smart contract.
+- **Alchemy**: If MetaMask is not available, **Alchemy** is used as the fallback provider to fetch public contract data such as the list of NFTs.
 
 ## 3. Assumptions and Decisions
 
