@@ -1,7 +1,6 @@
 import { NFT } from "@/blockchain/contract";
 import { LoadingImage } from "@/components";
 import { useTokenOwner, useTokenURI } from "@/hooks";
-import { truncate } from "@/utils";
 import {
   HStack,
   Image,

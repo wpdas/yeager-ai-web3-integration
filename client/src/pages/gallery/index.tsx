@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { contract } from "@/blockchain";
 import { NFT } from "@/blockchain/contract";
-import { NotConnectedContainer } from "@/components";
 import { NFTCard } from "@/components";
-import { useWallet } from "@/hooks";
 import {
   Container,
   Grid,
