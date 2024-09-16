@@ -1,18 +1,19 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { healthCheck } from "@/api";
 
 /**
- * This is temporary as Render account is using the Free Plan
- * and server will sleep after 50 seconds of inactivity.
+ * Check if server is alive
  */
 export const useApiHealthCheck = () => {
+  const [alive, setAlive] = useState(true);
   const check = useCallback(async () => {
     healthCheck()
       .then(() => {
-        console.info("Server Status: live :)");
+        setAlive(true);
       })
       .catch(() => {
         console.error("Server Status: down :/");
+        setAlive(false);
       });
   }, []);
 
@@ -21,6 +22,8 @@ export const useApiHealthCheck = () => {
     check();
     setInterval(async () => {
       check();
-    }, 45000);
+    }, 60000);
   }, [check]);
+
+  return alive;
 };
