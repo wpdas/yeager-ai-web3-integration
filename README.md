@@ -4,7 +4,9 @@ This is a DApp developed as part of a Web3 integration project where fronts such
 
 Users can view all minted NFTs, check their personal collection of NFTs, and mint new NFTs. The application connects to a blockchain network to fetch and display NFT data, providing a seamless user experience for interacting with smart contracts.
 
-<a href="https://yeager-ai-web3-integration.vercel.app/" target="_blank">**The DApp is live here. Click here to access it!**</a>
+Blockchain Network: [**Sepolia (Testnet)**](https://sepolia.etherscan.io/address/0x98437a94C9b2335Fe56fCAb0bA14e327976d2573)
+
+[**The DApp is live here. Click here to access it!**](https://yeager-ai-web3-integration.vercel.app/)
 
 <img alt="DApp Preview" src="./md/preview.png" />
 
