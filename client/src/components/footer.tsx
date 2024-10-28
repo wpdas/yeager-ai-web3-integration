@@ -20,7 +20,7 @@ export const Footer = () => {
             <HStack>
               <Image src="/assets/svgs/yeager-logo.svg" width="30px" />
               <Text fontSize="sm" fontWeight="medium">
-                YeagerAI NFTs
+                WendToken5 NFTs
               </Text>
             </HStack>
 
